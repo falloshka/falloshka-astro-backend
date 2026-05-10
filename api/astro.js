@@ -1,10 +1,9 @@
 export default async function handler(req, res) {
-  // ✅ CORS HEADERS
+  // ✅ CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  // ✅ Preflight (CORS OPTIONS)
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
@@ -25,7 +24,7 @@ Birth date: ${birth}
 Topic: ${topic}
 Message: ${message}
 
-Respond ONLY in ${lang}.
+Respond in ${lang}.
     `;
 
     const groqRes = await fetch(
@@ -45,14 +44,25 @@ Respond ONLY in ${lang}.
     );
 
     const data = await groqRes.json();
+
+    // 🔥 KRİTİK DEBUG
+    console.log("Groq raw response:", JSON.stringify(data));
+
+    if (data.error) {
+      return res.status(500).json({
+        result: `Groq error: ${data.error.message}`
+      });
+    }
+
     const text = data?.choices?.[0]?.message?.content;
 
     return res.status(200).json({
-      result: text || "The stars are quiet right now. Please try again.",
+      result: text || "Groq returned no content."
     });
+
   } catch (err) {
     return res.status(500).json({
-      result: "The astral flow was disrupted. Please try again.",
+      result: "Server error. Please try again."
     });
   }
 }
