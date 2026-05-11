@@ -24,7 +24,7 @@ Kurallar:
 - “enerjiler, ihtimaller, geçmişin etkileri” gibi ifadeler kullan
 - Bunun bir tarot falı olduğunu mutlaka belirt
 
-Yorumunu şimdi oluştur muistik ve ruhani bir falci sekilde. Yourmda samimi siz degil sen diye hitap et.
+Yorumunu şimdi oluştur mistik ve ruhani bir falci sekilde. Yourmda samimi siz degil sen diye hitap et.
 Cevabını SADECE Türkçe ver.
 `;
 
@@ -129,15 +129,10 @@ Odpovedaj IBA v slovenskom jazyku.
   }
 }
 
+
 /* ===============================
-VERCEL SERVERLESS FUNCTION
-=============================== */
-import Groq from "groq-sdk";
-
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
-
+   VERCEL SERVERLESS FUNCTION
+   =============================== */
 export default async function handler(req, res) {
   // ✅ CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -155,26 +150,41 @@ export default async function handler(req, res) {
   try {
     const { past, present, future, lang } = req.body;
 
-    if (!past || !present || !future) {
-      return res.status(400).json({
-        result: "Tarot cards are missing.",
+    const prompt = buildPrompt({ past, present, future, lang });
+
+    const groqRes = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "llama-3.1-8b-instant",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.7,
+        }),
+      }
+    );
+
+    const data = await groqRes.json();
+
+    if (data.error) {
+      console.error("Groq error:", data.error);
+      return res.status(500).json({
+        result: "Tarot enerjileri şu anda net değil.",
       });
     }
 
-    const prompt = buildPrompt({ past, present, future, lang });
-
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
-    });
+    const text = data?.choices?.[0]?.message?.content;
 
     return res.status(200).json({
-      result: completion.choices[0].message.content,
+      result: text || "Kartların enerjileri sessiz kalmayı seçiyor.",
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("Tarot handler error:", err);
     return res.status(500).json({
       result: "The tarot energies are unclear right now. Please try again.",
     });
