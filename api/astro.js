@@ -1,114 +1,139 @@
 /* ===============================
    PROMPT BUILDER (LANG BASED)
    =============================== */
-function buildPrompt({ name, birth, topic, message, lang }) {
+function buildPrompt({ name, birth, topic, message, lang, zodiac, element, planet }) {
   switch (lang) {
-    /* -------- TR -------- */
+
+    /* ================= TR ================= */
     case "tr":
       return `
-Sen deneyimli bir astroloji falcısısın.
-Sana verilen bilgilere dayanarak danışanın geleceğine dair bir yorum yapacaksın.
+        Sen deneyimli bir astroloji falcısısın.
 
-Danışanın adı: ${name}
-Doğum tarihi: ${birth}
-Odak konusu: ${topic}
-Danışanın mesajı: ${message}
+        Verilen bilgilere dayanarak geleceğe yönelik bir astroloji yorumu yap.
 
-Yorumun:
-- Geleceğe yönelik olmalı
-- Olumlu, motive edici ve umut verici olmalı
-- Kesinlik iddiasında bulunmamalı
-- Rehberlik eden, sakin ve iç rahatlatıcı bir dil kullanmalı
+        Danışanın adı: ${name}
+        Doğum tarihi: ${birth}
+        Burç: ${zodiac || "Unknown"}
+        Element: ${element || ""}
+        Yönetici gezegen: ${planet || ""}
+        Konu: ${topic}
+        Mesaj: ${message}
 
-Cevabını SADECE Türkçe ver.
+        Yorumun:
+        - Kişisel ve sezgisel hissettirmeli
+        - Burç, element ve gezegen enerjisini yansıtmalı
+        - Olumlu, motive edici ve umut verici olmalı
+        - Kesinlik iddiasında bulunmamalı
+
+        Cevabını SADECE Türkçe ver.
       `;
 
-    /* -------- EN -------- */
+    /* ================= EN ================= */
     case "en":
       return `
-You are an experienced astrological fortune reader.
-Based on the information given, provide a future-oriented astrological interpretation.
+        You are an experienced astrological fortune reader.
 
-Name: ${name}
-Birth date: ${birth}
-Focus topic: ${topic}
-User message: ${message}
+        Based on the information given, provide a future-oriented astrological interpretation.
 
-Your reading must be:
-- Positive, motivating, and hopeful
-- Emotionally reassuring
-- Future-oriented
-- Avoid absolute predictions or certainty claims
+        User name: ${name}
+        Birth date: ${birth}
+        Zodiac sign: ${zodiac || "Unknown"}
+        Element: : ${element || ""}
+        Ruling planet: ${planet || ""}
+        Topic: ${topic}
+        User message: ${message}
 
-Respond ONLY in English.
+        Your reading must:
+        - Feel deeply personal and intuitive
+        - Use the zodiac, elemental and planetary energy
+        - Be positive, motivating, and hopeful
+        - Avoid certainty or strict predictions
+
+        Respond ONLY in English.
       `;
 
-    /* -------- DE -------- */
+    /* ================= DE ================= */
     case "de":
       return `
-Du bist eine erfahrene astrologische Beraterin.
-Basierend auf den folgenden Informationen sollst du eine zukunftsorientierte Deutung geben.
+        Du bist eine erfahrene astrologische Beraterin.
 
-Name: ${name}
-Geburtsdatum: ${birth}
-Thema: ${topic}
-Nachricht: ${message}
+        Basierend auf den gegebenen Informationen erstelle eine zukunftsorientierte Deutung.
 
-Die Deutung soll:
-- Positiv, motivierend und hoffnungsvoll sein
-- Ruhig, unterstützend und einfühlsam formuliert sein
-- Keine absoluten Vorhersagen enthalten
+        Name: ${name}
+        Geburtsdatum: ${birth}
+        Sternzeichen: ${zodiac || "Unknown"}
+        Element: : ${element || ""}
+        Herrschender Planet: ${planet || ""}
+        Thema: ${topic}
+        Nachricht: ${message}
 
-Antworte AUSSCHLIESSLICH auf Deutsch.
+        Die Deutung soll:
+        - Persönlich und intuitiv wirken
+        - Die Energie von Sternzeichen, Element und Planet nutzen
+        - Positiv, motivierend und hoffnungsvoll sein
+        - Keine absoluten Vorhersagen enthalten
+
+        Antworte AUSSCHLIESSLICH auf Deutsch.
       `;
 
-    /* -------- SK -------- */
+    /* ================= SK ================= */
     case "sk":
       return `
-Si skúsený astrologický veštec.
-Na základe poskytnutých informácií vytvor výklad týkajúci sa budúcnosti.
+        Si skúsený astrologický veštec.
 
-Meno: ${name}
-Dátum narodenia: ${birth}
-Téma: ${topic}
-Správa používateľa: ${message}
+        Na základe poskytnutých informácií vytvor výklad zameraný na budúcnosť.
 
-Výklad má byť:
-- Pozitívny, povzbudzujúci a plný nádeje
-- Zameraný na budúcnosť
-- Bez absolútnych istôt alebo predpovedí
+        Meno: ${name}
+        Dátum narodenia: ${birth}
+        Znamenie: ${zodiac || "Unknown"}
+        Element: : ${element || ""}
+        Vládnuca planéta: ${planet || ""}
+        Téma: ${topic}
+        Správa: ${message}
 
-Odpovedaj IBA v slovenskom jazyku.
+        Výklad má byť:
+        - Osobný a intuitívny
+        - Zohľadňovať energiu znamenia, elementu a planéty
+        - Pozitívny, povzbudzujúci a plný nádeje
+        - Bez absolútnych tvrdení
+
+        Odpovedaj IBA v slovenskom jazyku.
       `;
 
-    /* -------- SR -------- */
+    /* ================= SR ================= */
     case "sr":
       return `
-Ti si iskusan astrološki tumač sudbine.
-Na osnovu datih informacija pruži tumačenje usmereno ka budućnosti.
+        Ti si iskusan astrološki tumač sudbine.
 
-Ime: ${name}
-Datum rođenja: ${birth}
-Tema: ${topic}
-Poruka korisnika: ${message}
+        Na osnovu datih informacija pruži tumačenje usmereno ka budućnosti.
 
-Tumačenje treba da bude:
-- Pozitivno, motivišuće i puno nade
-- Usmereno ka budućnosti
-- Bez tvrdnji o apsolutnoj sigurnosti
+        Ime: ${name}
+        Datum rođenja: ${birth}
+        Horoskopski znak: ${zodiac || "Unknown"}
+        Element: : ${element || ""}
+        Vladajuća planeta: ${planet || ""}
+        Tema: ${topic}
+        Poruka: ${message}
 
-Odgovori ISKLJUČIVO na srpskom jeziku.
+        Tumačenje treba da bude:
+        - Lično i intuitivno
+        - Uključuje energiju znaka, elementa i planete
+        - Pozitivno, motivišuće i puno nade
+        - Bez apsolutnih tvrdnji i sigurnosti
+
+        Odgovori ISKLJUČIVO na srpskom jeziku.
       `;
 
-    /* -------- FALLBACK -------- */
+    /* ================= FALLBACK ================= */
     default:
       return `
-You are an experienced astrological reader.
-Provide a positive, hopeful, future-oriented interpretation.
-Respond in English.
+        You are an astrological reader.
+        Provide a positive, intuitive, future-oriented reading.
+        Respond in English.
       `;
   }
 }
+
 
 /* ===============================
    VERCEL SERVERLESS FUNCTION
@@ -128,7 +153,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, birth, topic, message, lang } = req.body;
+    const { name, birth, topic, message, lang, zodiac, element, planet } = req.body;
 
     const prompt = buildPrompt({
       name,
@@ -136,6 +161,9 @@ export default async function handler(req, res) {
       topic,
       message,
       lang,
+      zodiac,
+      element,
+      planet
     });
 
     const groqRes = await fetch(
