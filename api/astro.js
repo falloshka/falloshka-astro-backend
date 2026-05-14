@@ -20,11 +20,13 @@ function buildPrompt({ name, birth, topic, message, lang, zodiac, element, plane
         Mesaj: ${message}
 
         Yorumun:
+        - Tam olarak 2 paragraf yaz
+        - Toplam 75–100 kelime
         - Kişisel ve sezgisel hissettirmeli
         - Burç, element ve gezegen enerjisini yansıtmalı
         - Olumlu, motive edici ve umut verici olmalı
         - Kesinlik iddiasında bulunmamalı
-
+        Yorumunu şimdi oluştur mistik ve ruhani bir falci sekilde. Yourmda samimi siz degil sen diye hitap et.
         Cevabını SADECE Türkçe ver.
       `;
 
@@ -44,11 +46,13 @@ function buildPrompt({ name, birth, topic, message, lang, zodiac, element, plane
         User message: ${message}
 
         Your reading must:
+        - Write exactly 2 paragraphs
+        - 75–100 words total
         - Feel deeply personal and intuitive
         - Use the zodiac, elemental and planetary energy
         - Be positive, motivating, and hopeful
         - Avoid certainty or strict predictions
-
+        Create your comment now in a mystical and spiritual fortune teller style. Write warmly and personally — use “you” informally, not formally.
         Respond ONLY in English.
       `;
 
@@ -68,11 +72,13 @@ function buildPrompt({ name, birth, topic, message, lang, zodiac, element, plane
         Nachricht: ${message}
 
         Die Deutung soll:
+        - Genau 2 Absätze
+        - Insgesamt 75–100 Wörter 
         - Persönlich und intuitiv wirken
         - Die Energie von Sternzeichen, Element und Planet nutzen
         - Positiv, motivierend und hoffnungsvoll sein
         - Keine absoluten Vorhersagen enthalten
-
+        Erschaffe jetzt deinen Kommentar in einer mystischen und spirituellen Wahrsager-Art. Schreib herzlich und persönlich — sprich nicht mit „Sie“, sondern mit „du“.
         Antworte AUSSCHLIESSLICH auf Deutsch.
       `;
 
@@ -92,11 +98,13 @@ function buildPrompt({ name, birth, topic, message, lang, zodiac, element, plane
         Správa: ${message}
 
         Výklad má byť:
+        - Presne 2 odseky
+        - Spolu 75–100 slov
         - Osobný a intuitívny
         - Zohľadňovať energiu znamenia, elementu a planéty
         - Pozitívny, povzbudzujúci a plný nádeje
         - Bez absolútnych tvrdení
-
+        Teraz vytvor svoj komentár v mystickom a duchovnom štýle veštice. Píš úprimne a osobne — oslovuj neformálne, používaj „ty“, nie formálne oslovenie.
         Odpovedaj IBA v slovenskom jazyku.
       `;
 
@@ -116,11 +124,13 @@ function buildPrompt({ name, birth, topic, message, lang, zodiac, element, plane
         Poruka: ${message}
 
         Tumačenje treba da bude:
+        - Tačno 2 pasusa
+        - Ukupno 75–100 reči
         - Lično i intuitivno
         - Uključuje energiju znaka, elementa i planete
         - Pozitivno, motivišuće i puno nade
         - Bez apsolutnih tvrdnji i sigurnosti
-
+        Sada napravi svoj komentar u mističnom i duhovnom stilu proroka. Piši iskreno i prisno — obraćaj se sa „ti“, ne formalno.
         Odgovori ISKLJUČIVO na srpskom jeziku.
       `;
 
