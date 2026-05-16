@@ -1,38 +1,53 @@
+import https from "https";
+
 export const config = {
   runtime: "nodejs",
 };
 
 export default async function handler(req, res) {
   try {
-    const HF_URL = "https://api-inference.huggingface.co/models/gpt2";
+    const data = JSON.stringify({
+      inputs: "Hello my name is",
+    });
 
-    const response = await fetch(HF_URL, {
+    const options = {
+      hostname: "api-inference.huggingface.co",
+      path: "/models/gpt2",
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.HF_TOKEN}`,
         "Content-Type": "application/json",
+        "Content-Length": data.length,
       },
-      body: JSON.stringify({
-        inputs: "Hello my name is",
-      }),
+    };
+
+    const hfReq = https.request(options, (hfRes) => {
+      let body = "";
+
+      hfRes.on("data", (chunk) => {
+        body += chunk;
+      });
+
+      hfRes.on("end", () => {
+        res.status(200).json({
+          success: true,
+          raw: body.slice(0, 300),
+        });
+      });
     });
 
-    const text = await response.text();
-
-    let json = null;
-    try {
-      json = JSON.parse(text);
-    } catch {}
-
-    return res.status(200).json({
-      success: true,
-      isJson: !!json,
-      data: json,
-      raw: text.slice(0, 200),
+    hfReq.on("error", (error) => {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
     });
+
+    hfReq.write(data);
+    hfReq.end();
 
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       error: error.message,
     });
