@@ -1,9 +1,10 @@
+export const config = {
+  runtime: "nodejs",
+};
+
 export default async function handler(req, res) {
   try {
     const HF_URL = "https://api-inference.huggingface.co/models/gpt2";
-
-    console.log("HF URL:", HF_URL);
-    console.log("HF TOKEN VAR MI:", !!process.env.HF_TOKEN);
 
     const response = await fetch(HF_URL, {
       method: "POST",
@@ -16,26 +17,18 @@ export default async function handler(req, res) {
       }),
     });
 
-    const status = response.status;
     const text = await response.text();
 
     let json = null;
     try {
       json = JSON.parse(text);
-    } catch (e) {
-      // JSON değilse sorun yok, aşağıda döndürüyoruz
-    }
+    } catch {}
 
     return res.status(200).json({
       success: true,
-      debug: {
-        status,
-        url: HF_URL,
-        tokenExists: !!process.env.HF_TOKEN,
-      },
-      isJson: json !== null,
+      isJson: !!json,
       data: json,
-      raw: text.substring(0, 300),
+      raw: text.slice(0, 200),
     });
 
   } catch (error) {
