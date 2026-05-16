@@ -60,6 +60,14 @@ export default async function handler(req, res) {
     }
 
     const data = await groqRes.json();
+    console.log("GROQ RESPONSE:", data);
+
+    if (data.error) {
+      console.error("GROQ ERROR:", data.error);
+      return res.status(500).json({
+        result: "AI error: " + data.error.message
+      });
+    }
 
     const text = data?.choices?.[0]?.message?.content;
 
