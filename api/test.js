@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   try {
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/distilbert-base-uncased",
+      "https://api-inference.huggingface.co/models/gpt2",
       {
         method: "POST",
         headers: {
@@ -9,41 +9,20 @@ export default async function handler(req, res) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          inputs: "Hello world"
+          inputs: "Hello my name is",
         }),
       }
     );
 
-    const text = await response.text();
+    const data = await response.json();
 
-    // ✅ parse safe
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      return res.status(500).json({
-        success: false,
-        error: "HF JSON dönmedi",
-        raw: text.slice(0, 300),
-      });
-    }
-
-    // ✅ STATUS CHECK
-    if (!response.ok) {
-      return res.status(500).json({
-        success: false,
-        error: "HF responded with error",
-        raw: data,
-      });
-    }
-
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       data,
     });
 
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       error: error.message,
     });
