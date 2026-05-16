@@ -1,5 +1,15 @@
 export default async function handler(req, res) {
 
+  // 🔥 CORS (ZORUNLU)
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // 🔥 PREFLIGHT SUPPORT (ÇOK KRİTİK)
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
   }
@@ -53,21 +63,26 @@ export default async function handler(req, res) {
       }
     );
 
+
     if (!groqRes.ok) {
+      const text = await groqRes.text();
+      console.error("HTTP ERROR:", text);
+
       return res.status(500).json({
         result: "AI service unavailable."
       });
     }
 
     const data = await groqRes.json();
-    console.log("GROQ RESPONSE:", data);
 
     if (data.error) {
       console.error("GROQ ERROR:", data.error);
+
       return res.status(500).json({
         result: "AI error: " + data.error.message
       });
     }
+
 
     const text = data?.choices?.[0]?.message?.content;
 
@@ -75,9 +90,12 @@ export default async function handler(req, res) {
       result: text || "The coffee grounds remain quiet... try again later."
     });
 
-  } catch (err) {
+  }
+  catch (err) {
+    console.error("SERVER ERROR:", err);
     return res.status(500).json({
       result: "The coffee reading failed. Try again."
     });
+
   }
 }
