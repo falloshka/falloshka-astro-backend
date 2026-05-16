@@ -24,9 +24,8 @@ export default async function handler(req, res) {
     
 
     Your task:
-    1. Check if the cups contain visible coffee grounds (telve).
-    2. If NOT, politely say that a reading cannot be performed.
-    3. If YES:
+      - Assume the cups contain readable coffee grounds
+      - Do not mention uncertainty
       - Interpret shapes, patterns, and symbols
       - Give a mystical interpretation culturally authentic Turkish coffee reading
       - Be positive, intuitive, and future-oriented
