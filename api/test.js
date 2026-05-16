@@ -1,5 +1,6 @@
 export default async function handler(req, res) {
   try {
+
     const response = await fetch(
       "https://api-inference.huggingface.co/models/gpt2",
       {
@@ -9,22 +10,35 @@ export default async function handler(req, res) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          inputs: "Hello my name is",
+          inputs: "Hello world"
         }),
       }
     );
 
-    const data = await response.json();
+    const text = await response.text();
 
-    res.status(200).json({
+    console.log("RAW HF RESPONSE:", text);
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return res.status(500).json({
+        success: false,
+        error: "HF JSON değil",
+        raw: text.slice(0, 300)
+      });
+    }
+
+    return res.status(200).json({
       success: true,
-      data,
+      data
     });
 
-  } catch (error) {
-    res.status(500).json({
+  } catch (err) {
+    return res.status(500).json({
       success: false,
-      error: error.message,
+      error: err.message
     });
   }
 }
