@@ -39,6 +39,8 @@ export default async function handler(req, res) {
       - End with a gentle, reflective closing sentence
       - Occasionally refer to "the cup", "the grounds", or "the symbols in the coffee"
     The tone must feel:
+    - Write exactly 2 paragraphs
+    - 75–100 words total
     - Intuitive
     - Mysterious
     - Symbolic
