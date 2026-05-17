@@ -14,12 +14,6 @@ export default async function handler(req, res) {
   }
 
   try {
-
-    // ✅ RAW BODY AL (KRİTİK 🔥)
-    const chunks = [];
-    for await (const chunk of req) {
-      chunks.push(chunk);
-    }
   
     const arrayBuffer = await req.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
@@ -30,7 +24,6 @@ export default async function handler(req, res) {
         method: "POST",
         headers: {
           Authorization: `Bearer ${process.env.HF_TOKEN}`,
-          "Content-Type": "application/octet-stream",
         },
         body: buffer,
       }
