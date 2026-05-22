@@ -1,6 +1,6 @@
-export default async function handler(req, res) {
+import fetch from "node-fetch";
 
-  // ✅ CORS
+export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -14,25 +14,42 @@ export default async function handler(req, res) {
   }
 
   try {
-  
-    const arrayBuffer = await req.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-      // 🔥 HuggingFace request 
+    const buffer = await new Promise((resolve, reject) => {
+      const chunks = [];
+      req.on("data", (chunk) => chunks.push(chunk));
+      req.on("end", () => resolve(Buffer.concat(chunks)));
+      req.on("error", reject);
+    });
+
+    console.log("BUFFER LENGTH:", buffer.length);
+
     const hfRes = await fetch(
-      "https://api-inference.huggingface.co/models/google/vit-base-patch16-224",
+      "https://router.huggingface.co/hf-inference/models/google/vit-base-patch16-224",
       {
         method: "POST",
         headers: {
           Authorization: `Bearer ${process.env.HF_TOKEN}`,
+          "Content-Type": "application/octet-stream"
         },
-        body: buffer,
+        body: buffer
       }
     );
-    const data = await hfRes.json();
 
+    console.log("HF STATUS:", hfRes.status);
+
+    if (!hfRes.ok) {
+      const text = await hfRes.text();
+      console.log("HF ERROR:", text);
+
+      return res.status(200).json({
+        isCup: false,
+        raw: { error: text }
+      });
+    }
+
+    const data = await hfRes.json();
     console.log("HF RESPONSE:", data);
 
-    // ✅ SAFE CHECK
     if (!Array.isArray(data)) {
       return res.status(200).json({
         isCup: false,
@@ -52,10 +69,11 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error("VALIDATION ERROR:", err);
+    console.error("ERROR:", err);
 
-    return res.status(500).json({
-      error: "Image validation failed"
+    return res.status(200).json({   // ✅ DİKKAT
+      isCup: false,
+      raw: { error: err.message }
     });
   }
 }

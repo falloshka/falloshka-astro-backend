@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     - Mysterious
     - Symbolic
     - Emotionally engaging
-    - if language is TR: use culturally authentic Turkish coffee reading style and symbolism and call cups "fincanlar", grounds "telve", and evil eye "nazar". If language is not TR, use general coffee reading symbolism but maintain a mystical tone.
+    - if language is TR: use culturally authentic Turkish coffee reading style and symbolism and call cup and cups "fincan", grounds "telve", and evil eye "nazar". If language is not TR, use general coffee reading symbolism but maintain a mystical tone.
     Respond ONLY in ${lang || "en"}.
     `;
 
