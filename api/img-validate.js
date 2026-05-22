@@ -1,17 +1,13 @@
-import fetch from "node-fetch";
-
 export default async function handler(req, res) {
 
-  // ✅ CORS - FULL FIX
+  // ✅ CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  // ✅ PREFLIGHT handle
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
-
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
@@ -25,26 +21,20 @@ export default async function handler(req, res) {
       req.on("error", reject);
     });
 
-    console.log("BUFFER LENGTH:", buffer.length);
-
     const hfRes = await fetch(
       "https://router.huggingface.co/hf-inference/models/google/vit-base-patch16-224",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.HF_TOKEN}`,
+          Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
           "Content-Type": "application/octet-stream"
         },
         body: buffer
       }
     );
 
-    console.log("HF STATUS:", hfRes.status);
-
     if (!hfRes.ok) {
       const text = await hfRes.text();
-      console.log("HF ERROR:", text);
-
       return res.status(200).json({
         isCup: false,
         raw: { error: text }
@@ -52,7 +42,6 @@ export default async function handler(req, res) {
     }
 
     const data = await hfRes.json();
-    console.log("HF RESPONSE:", data);
 
     if (!Array.isArray(data)) {
       return res.status(200).json({
@@ -73,9 +62,7 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error("ERROR:", err);
-
-    return res.status(200).json({   // ✅ DİKKAT
+    return res.status(200).json({
       isCup: false,
       raw: { error: err.message }
     });
